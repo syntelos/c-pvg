@@ -86,7 +86,7 @@ size_t encode_page(char *buffer, size_t size, const char* source, size_t source_
 
   char *bp = buffer;
   ssize_t bz = size;
-  ssize_t output = 0;
+  size_t output = 0;
   wr = snprintf(bp,bz,"static const char *page_head = {\n");
   bp += wr;
   bz -= wr;
