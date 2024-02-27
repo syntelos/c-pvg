@@ -31,7 +31,7 @@ inc/page.h: etc/page_generate.c etc/page.svg $(HEADERS) $(SOURCES)
 	./page_generate
 
 clean:
-	$(RM) pvg page_generate
+	$(RM) pvg page_generate *.svg
 
 install: pvg
 	sudo cp -p pvg /usr/local/bin

@@ -9,6 +9,7 @@
 bool_t pvg_encode(pvg_file *tgt, pvg_text *src, char *style){
   char *tgt_p = tgt->buffer;
   size_t tgt_z = tgt->alloc;
+  size_t output = 0;
   ssize_t wr;
   uint32_t idx;
   /*
@@ -19,6 +20,7 @@ bool_t pvg_encode(pvg_file *tgt, pvg_text *src, char *style){
     if (0 < wr){
       tgt_p += wr;
       tgt_z -= wr;
+      output += wr;
     }
     else {
       break;
@@ -48,6 +50,7 @@ bool_t pvg_encode(pvg_file *tgt, pvg_text *src, char *style){
       if (0 < wr){
 	tgt_p += wr;
 	tgt_z -= wr;
+	output += wr;
 	y += pvg_page_lh;
       }
       else {
@@ -67,6 +70,7 @@ bool_t pvg_encode(pvg_file *tgt, pvg_text *src, char *style){
       if (0 < wr){
 	tgt_p += wr;
 	tgt_z -= wr;
+	output += wr;
 	y += pvg_page_lh;
       }
       else {
@@ -84,10 +88,12 @@ bool_t pvg_encode(pvg_file *tgt, pvg_text *src, char *style){
     if (0 < wr){
       tgt_p += wr;
       tgt_z -= wr;
+      output += wr;
     }
     else {
       break;
     }
   }
+  tgt->limit = output;
   return true;
 }
