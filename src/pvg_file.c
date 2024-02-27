@@ -124,8 +124,7 @@ pvg_file* pvg_file_read(const char *file){
 
 void pvg_file_destroy(pvg_file *object){
   if (null != object){
-    size_t size = (sizeof(pvg_file)+object->alloc);
-    memset(object,0,size);
+    memset(object,0,object->alloc);
     free(object);
   }
 }

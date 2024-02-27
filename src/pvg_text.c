@@ -10,15 +10,16 @@ pvg_text* pvg_text_read(const char *filename){
   pvg_file *file = pvg_file_read(filename);
   if (null != file){
     pvg_text *text = pvg_text_new();
-    pvg_string inl;
-    while (pvg_file_readline(&inl,file) && pvg_text_append(text,&inl)){
-      continue;
+    if (null != text){
+      pvg_string inl;
+      while (pvg_file_readline(&inl,file)){
+
+	text = pvg_text_append(text,&inl);
+      }
+      return text;
     }
-    return text;
   }
-  else {
-    return null;
-  }
+  return null;
 }
 
 pvg_text* pvg_text_new(){
@@ -62,62 +63,44 @@ size_t pvg_text_count(pvg_text *doc){
 }
 
 pvg_text* pvg_text_append(pvg_text *oarray, pvg_string *line){
-  if (null != oarray && null != line){
+  if (null != oarray && null != line && 0 != line->length){
     size_t ocount = pvg_text_count(oarray);
     size_t ncount = (ocount+1);
     pvg_text *narray = calloc(ncount,sizeof(pvg_text));
     if (null != narray){
       size_t extant = (ocount*sizeof(pvg_text));
       memcpy(narray,oarray,extant);
-      {
-	off_t rindex = (ocount-1);
-	pvg_text *record = (narray+rindex);
-	pvg_string *text = &(record->text);
-	pvg_string *link = &(record->link);
+      memset(oarray,0,extant);
+      free(oarray);
+      oarray = null;
 
-	char *ht = memchr(line,'\t',line->length);
-	if (null != ht){
-	  char *nl = memchr(line,'\n',line->length);
-	  if (null != nl && nl > ht){
-	    char *src_text = (char*)line;
-	    ssize_t cnt_text = (ht-src_text);
-	    char *src_link = (ht+1);
-	    ssize_t cnt_link = (nl-src_link);
+      off_t rindex = (ocount-1);
+      pvg_text *record = (narray+rindex);
+      pvg_string *text = &(record->text);
+      pvg_string *link = &(record->link);
 
-	    memcpy(text,src_text,cnt_text);
-	    text->length = cnt_text;
+      char *nl = (char*)line+line->length;
+      char *ht = memchr(line,'\t',line->length);
+      if (null != ht){
+	char *src_text = (char*)line;
+	ssize_t cnt_text = (ht-src_text);
 
-	    memcpy(link,src_link,cnt_link);
-	    link->length = cnt_link;
+	char *src_link = (ht+1);
+	ssize_t cnt_link = (nl-src_link);
 
-	    memset(oarray,0,extant);
-	    free(oarray);
-	    oarray = null;
-	    return narray;
-	  }
-	  else {
-	    memset(narray,0,extant);
-	    free(narray);
-	  }
-	}
-	else {
-	  char *nl = memchr(line,'\n',line->length);
-	  if (null != nl){
-	    char *src_text = (char*)line;
-	    ssize_t cnt_text = (nl-src_text);
+	memcpy(text,src_text,cnt_text);
+	text->length = cnt_text;
 
-	    memcpy(text,src_text,cnt_text);
-	    text->length = cnt_text;
-	    memset(oarray,0,extant);
-	    free(oarray);
-	    oarray = null;
-	    return narray;
-	  }
-	  else {
-	    memset(narray,0,extant);
-	    free(narray);
-	  }
-	}
+	memcpy(link,src_link,cnt_link);
+	link->length = cnt_link;
+
+	return narray;
+      }
+      else {
+	memcpy(text,line,line->length);
+	text->length = line->length;
+
+	return narray;
       }
     }
   }
