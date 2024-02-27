@@ -22,12 +22,22 @@ pvg_text* pvg_text_read(const char*);
  * An array of pvg_text blocks is null terminated.
  */
 pvg_text* pvg_text_new();
-
-#define pvg_text_terminal(p) null != p && 0 == p->text.length
-
-#define pvg_text_not_terminal(p) null != p && 0 != p->text.length
 /*
- * An array of pvg_text blocks is null terminated.
+ * Array element is tail null.
+ */
+bool_t pvg_text_terminal(pvg_text*);
+/*
+ * Array element is not tail null.
+ */
+bool_t pvg_text_not_terminal(pvg_text*);
+/*
+ * An array of pvg_text blocks is null terminated.  Number
+ * of records in array, exclusive of terminal.
+ */
+size_t pvg_text_length(pvg_text*);
+/*
+ * An array of pvg_text blocks is null terminated.  Number
+ * of records in array, inclusive of terminal.
  */
 size_t pvg_text_count(pvg_text*);
 /*

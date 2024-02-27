@@ -35,7 +35,7 @@ bool_t pvg_encode(pvg_file *tgt, pvg_text *src, char *style){
   char *class_p = (char*)&class;
   class.length = sprintf(class_p,"%s",style);
 
-  size_t count = pvg_text_count(src);
+  size_t count = pvg_text_length(src);
   for (idx = 0; idx < count; idx++, src++){
     if (0 != src->link.length){
       if (1 == line){

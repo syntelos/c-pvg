@@ -48,7 +48,7 @@ pvg_file* pvg_file_read(const char*);
  * Read line into string, counting but not copying line
  * terminals (NL '\n' 0x0A).
  */
-bool_t pvg_readline(pvg_string*, pvg_file*);
+bool_t pvg_file_readline(pvg_string*, pvg_file*);
 /*
  * Copy object content to file.
  */

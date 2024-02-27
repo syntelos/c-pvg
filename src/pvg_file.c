@@ -148,7 +148,7 @@ bool_t pvg_file_write(pvg_file *object, const char *file){
   return false;
 }
 
-bool_t pvg_readline(pvg_string *tgt, pvg_file *src){
+bool_t pvg_file_readline(pvg_string *tgt, pvg_file *src){
   if (null != tgt && null != src){
     memset(tgt,0,sizeof(pvg_string));
     char *begin = src->buffer+src->ofset;

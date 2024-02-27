@@ -11,7 +11,7 @@ pvg_text* pvg_text_read(const char *filename){
   if (null != file){
     pvg_text *text = pvg_text_new();
     pvg_string inl;
-    while (pvg_readline(&inl,file) && pvg_text_append(text,&inl)){
+    while (pvg_file_readline(&inl,file) && pvg_text_append(text,&inl)){
       continue;
     }
     return text;
@@ -25,13 +25,40 @@ pvg_text* pvg_text_new(){
   return calloc(1,sizeof(pvg_text));
 }
 
-size_t pvg_text_count(pvg_text *doc){
-  size_t count = 0;
-  while (pvg_text_not_terminal(doc)){
+bool_t pvg_text_terminal(pvg_text *record){
+  return (null != record && 0 == record->text.length);
+}
 
-    count += 1;
+bool_t pvg_text_not_terminal(pvg_text *record){
+  return (null != record && 0 != record->text.length);
+}
+
+size_t pvg_text_length(pvg_text *doc){
+  if (null != doc){
+    size_t count = 0;
+    for (; pvg_text_not_terminal(doc); doc++){
+
+      count += 1;
+    }
+    return count;
   }
-  return count;
+  else {
+    return 0;
+  }
+}
+
+size_t pvg_text_count(pvg_text *doc){
+  if (null != doc){
+    size_t count = 1;
+    for (; pvg_text_not_terminal(doc); doc++){
+
+      count += 1;
+    }
+    return count;
+  }
+  else {
+    return 0;
+  }
 }
 
 pvg_text* pvg_text_append(pvg_text *oarray, pvg_string *line){
@@ -43,7 +70,8 @@ pvg_text* pvg_text_append(pvg_text *oarray, pvg_string *line){
       size_t extant = (ocount*sizeof(pvg_text));
       memcpy(narray,oarray,extant);
       {
-	pvg_text *record = (narray+ocount);
+	off_t rindex = (ocount-1);
+	pvg_text *record = (narray+rindex);
 	pvg_string *text = &(record->text);
 	pvg_string *link = &(record->link);
 
