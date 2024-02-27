@@ -4,7 +4,7 @@
  */
 #include "pvg.h"
 
-bool_t pvg_encode(pvg_file *tgt, pvg_file *src){
+bool_t pvg_encode(pvg_file *tgt, pvg_file *src, char *style){
 
   return false; // [TODO] (pvg_encode)
 }

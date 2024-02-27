@@ -147,3 +147,33 @@ bool_t pvg_file_write(pvg_file *object, const char *file){
   }
   return false;
 }
+
+bool_t pvg_readline(pvg_string *tgt, pvg_file *src){
+  if (null != tgt && null != src){
+    memset(tgt,0,sizeof(pvg_string));
+    char *begin = src->buffer+src->ofset;
+    char *end = src->buffer+src->limit;
+    ssize_t len = (end-begin);
+
+    if ('\n' == *begin){
+      if (1 < len){
+	src->ofset += 1;
+	tgt->length = 1;
+	return true;
+      }
+    }
+    else {
+      char *lend = strchr(begin,'\n');
+      if (lend > begin){
+	size_t count = (lend-begin);
+	if (count < pvg_string_buffer_size){
+	  memcpy(tgt,begin,count);
+	  src->ofset += (count+1);
+	  tgt->length = (count+1);
+	  return true;
+	}
+      }
+    }
+  }
+  return false;
+}

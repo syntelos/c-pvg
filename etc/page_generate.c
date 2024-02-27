@@ -14,9 +14,14 @@ static const char *target_head[] = {
   " */",
   "#ifndef _pvg_page_h",
   "#define _pvg_page_h",
-  ""
+  "",
+  "#define pvg_page_lh 18",
+  "#define pvg_page_em 12",
+  "#define pvg_page_x0 30",
+  "#define pvg_page_y0 50",
+  "",
 };
-static const size_t target_head_count = 9;
+static const size_t target_head_count = 12;
 
 static const char *target_tail[] = {
   "",

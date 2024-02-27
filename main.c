@@ -5,12 +5,10 @@
 #include "pvg.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
+#include <string.h>
 
 int usage(){
-  fprintf(stderr,"usage: pvg <tgt> <src>\n");
+  fprintf(stderr,"usage: pvg <tgt> <src> [rm|tt] \n");
   return 1;
 }
 
@@ -19,7 +17,18 @@ int main(int argc, char **argv){
     pvg_file *tgt = pvg_file_new(0x100000);
     pvg_file *src = pvg_file_read(argv[2]);
 
-    return (pvg_encode(tgt,src) && pvg_file_write(tgt,argv[1]));
+    char *style = "rm";
+    if (3 < argc && 0 == strcmp("tt",argv[3])){
+      style = "tt";
+    }
+
+    if (pvg_encode(tgt,src,style) && pvg_file_write(tgt,argv[1]),style){
+
+      return 0;
+    }
+    else {
+      return 1;
+    }
   }
   else {
     return usage();

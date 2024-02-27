@@ -8,12 +8,12 @@
 #include "pvg_string.h"
 /*
  * A tail array behaves is an integral allocated unit,
- * including allocation and employment registers for
- * maintenance and development.
+ * including registers for allocation, source, and copy.
  */
 typedef struct {
   size_t alloc;
   size_t limit;
+  off_t  ofset;
   char buffer[];
 } pvg_file;
 
@@ -44,6 +44,11 @@ void pvg_file_destroy(pvg_file*);
  * Copy file content to object.
  */
 pvg_file* pvg_file_read(const char*);
+/*
+ * Read line into string, counting but not copying line
+ * terminals (NL '\n' 0x0A).
+ */
+bool_t pvg_readline(pvg_string*, pvg_file*);
 /*
  * Copy object content to file.
  */

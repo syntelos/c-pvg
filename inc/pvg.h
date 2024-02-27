@@ -6,8 +6,9 @@
 #define _pvg_h_
 
 #include "syntelos.h"
-#include "pvg_file.h"
 #include "pvg_string.h"
+#include "pvg_file.h"
+#include "pvg_text.h"
 #include "pvg_encode.h"
 
 #endif

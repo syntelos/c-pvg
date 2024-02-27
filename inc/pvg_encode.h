@@ -8,6 +8,6 @@
 #include "syntelos.h"
 #include "pvg_file.h"
 
-bool_t pvg_encode(pvg_file*,pvg_file*);
+bool_t pvg_encode(pvg_file*,pvg_file*,char*);
 
 #endif

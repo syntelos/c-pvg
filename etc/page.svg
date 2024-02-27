@@ -4,20 +4,25 @@
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="500" height="500" viewBox="0 0 500 500">
   <defs>
     <style type="text/css">
-      text {
+      text.rm {
 	  font-family: "Computer Modern Serif", serif;
 	  font-size: 12;
 	  fill: black;
       }
-      text.title {
+      text.tt {
+	  font-family: "Computer Modern Typewriter", monospace;
+	  font-size: 12;
+	  fill: black;
+      }
+      text.ti {
 	  font-size: 22;
 	  font-weight: bold
       }
-      text.link {
+      text.ln {
           fill: #0066B3
       }
     </style>
   </defs>
   <rect x="0" y="0" width="500" height="500" fill="#FFF" stroke="#000" stroke-width="30" />
-  <text class="title" x="40" y="50">Hello, world.</text>
+  <text class="tt ti" x="40" y="50">Hello, world.</text>
 </svg>
