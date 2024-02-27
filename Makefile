@@ -23,14 +23,12 @@ HEADERS := $(shell ls inc/*.h)
 
 SOURCES := $(shell ls src/*.c)
 
-pvg: main.c inc/page.h $(HEADERS) $(SOURCES)
+pvg: main.c $(HEADERS) $(SOURCES)
 	$(CC) $(CCFLAGS) -o $@ $< $(SOURCES) $(LDFLAGS)
 
-inc/page.h: page_generate
+inc/page.h: etc/page_generate.c etc/page.svg $(HEADERS) $(SOURCES)
+	$(CC) $(CCFLAGS) -o $@ $< $(SOURCES) $(LDFLAGS)
 	./page_generate
-
-page_generate: etc/page_generate.c etc/page.svg $(HEADERS) $(SOURCES)
-	$(CC) $(CCFLAGS) -o $@ $< $(SOURCES) $(LDFLAGS)
 
 clean:
 	$(RM) pvg page_generate
