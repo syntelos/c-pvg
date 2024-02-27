@@ -95,11 +95,13 @@ size_t encode_page(char *buffer, size_t size, const char* source, size_t source_
   wr = snprintf(bp,bz,"static const char *page_head = {\n");
   bp += wr;
   bz -= wr;
+  output += wr;
   pvg_string line;
+  pvg_string *linep = (&line);
   const char *sp = source;
   size_t sz = source_len;
   while (readline(&line,sp,sz)){
-    if (isbreak(&line)){
+    if (isbreak(linep)){
       sp += line.length;
       sz -= line.length;
 
@@ -114,7 +116,7 @@ size_t encode_page(char *buffer, size_t size, const char* source, size_t source_
       output += wr;
     }
     else {
-      wr = snprintf(bp,sz,"  \"%s\",\n",(char*)(&line));
+      wr = snprintf(bp,sz,"  \"%s\",\n",(char*)linep);
       bp += wr;
       bz -= wr;
       output += wr;
