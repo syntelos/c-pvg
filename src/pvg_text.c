@@ -37,43 +37,60 @@ size_t pvg_text_count(pvg_text *doc){
 pvg_text* pvg_text_append(pvg_text *oarray, pvg_string *line){
   if (null != oarray && null != line){
     size_t ocount = pvg_text_count(oarray);
-    size_t ncount = (ocount+2);
+    size_t ncount = (ocount+1);
     pvg_text *narray = calloc(ncount,sizeof(pvg_text));
     if (null != narray){
       size_t extant = (ocount*sizeof(pvg_text));
       memcpy(narray,oarray,extant);
-      memset(oarray,0,extant);
-      free(oarray);
-      oarray = null;
       {
 	pvg_text *record = (narray+ocount);
 	pvg_string *text = &(record->text);
 	pvg_string *link = &(record->link);
 
-	char *src_text = (char*)line;
-
 	char *ht = memchr(line,'\t',line->length);
 	if (null != ht){
 	  char *nl = memchr(line,'\n',line->length);
-	  ssize_t cnt_text = (ht-src_text);
-	  char *src_link = (ht+1);
-	  ssize_t cnt_link = (nl-src_link);
+	  if (null != nl && nl > ht){
+	    char *src_text = (char*)line;
+	    ssize_t cnt_text = (ht-src_text);
+	    char *src_link = (ht+1);
+	    ssize_t cnt_link = (nl-src_link);
 
-	  memcpy(text,src_text,cnt_text);
-	  text->length = cnt_text;
+	    memcpy(text,src_text,cnt_text);
+	    text->length = cnt_text;
 
-	  memcpy(link,src_link,cnt_link);
-	  link->length = cnt_link;
+	    memcpy(link,src_link,cnt_link);
+	    link->length = cnt_link;
+
+	    memset(oarray,0,extant);
+	    free(oarray);
+	    oarray = null;
+	    return narray;
+	  }
+	  else {
+	    memset(narray,0,extant);
+	    free(narray);
+	  }
 	}
 	else {
-	  char *nl = strchr(src_text,'\n');
-	  ssize_t cnt_text = (nl-src_text);
+	  char *nl = memchr(line,'\n',line->length);
+	  if (null != nl){
+	    char *src_text = (char*)line;
+	    ssize_t cnt_text = (nl-src_text);
 
-	  memcpy(text,src_text,cnt_text);
-	  text->length = cnt_text;
+	    memcpy(text,src_text,cnt_text);
+	    text->length = cnt_text;
+	    memset(oarray,0,extant);
+	    free(oarray);
+	    oarray = null;
+	    return narray;
+	  }
+	  else {
+	    memset(narray,0,extant);
+	    free(narray);
+	  }
 	}
       }
-      return narray;
     }
   }
   return oarray;
