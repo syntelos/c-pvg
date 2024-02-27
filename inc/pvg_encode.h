@@ -6,9 +6,9 @@
 #define _pvg_encode_h
 
 #include "syntelos.h"
-#include "pvg_file.h"
-#include "pvg_text.h"
+#include "txt_file.h"
+#include "txt_text.h"
 
-bool_t pvg_encode(pvg_file*,pvg_text*,char*);
+bool_t pvg_encode(txt_file*,txt_text*,char*);
 
 #endif

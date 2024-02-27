@@ -6,7 +6,7 @@
 #include "pvg_page.h"
 #include <stdio.h>
 
-bool_t pvg_encode(pvg_file *tgt, pvg_text *src, char *style){
+bool_t pvg_encode(txt_file *tgt, txt_text *src, char *style){
   char *tgt_p = tgt->buffer;
   size_t tgt_z = tgt->alloc;
   size_t output = 0;
@@ -31,11 +31,11 @@ bool_t pvg_encode(pvg_file *tgt, pvg_text *src, char *style){
    */
   size_t x = pvg_page_x0, y = pvg_page_y0;
   size_t line = 1;
-  pvg_string class;
+  txt_string class;
   char *class_p = (char*)&class;
   class.length = sprintf(class_p,"%s",style);
 
-  size_t count = pvg_text_length(src);
+  size_t count = txt_text_length(src);
   for (idx = 0; idx < count; idx++, src++){
     if (0 != src->link.length){
       if (1 == line){

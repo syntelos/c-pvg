@@ -14,9 +14,9 @@ int usage(){
 
 int main(int argc, char **argv){
   if (2 < argc){
-    pvg_file *tgt = pvg_file_new(0x100000);
+    txt_file *tgt = txt_file_new(0x100000);
     if (null != tgt){
-      pvg_text *src = pvg_text_read(argv[2]);
+      txt_text *src = txt_text_read(argv[2]);
       if (null != src){
 
 	char *style = "rm";
@@ -24,7 +24,7 @@ int main(int argc, char **argv){
 	  style = "tt";
 	}
 
-	if (pvg_encode(tgt,src,style) && pvg_file_write(tgt,argv[1]),style){
+	if (pvg_encode(tgt,src,style) && txt_file_write(tgt,argv[1]),style){
 
 	  return 0;
 	}

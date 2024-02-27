@@ -2,7 +2,7 @@
  * page svg from text
  * Copyright (C) 2024, John Pritchard, Syntelos
  */
-#include "pvg_file.h"
+#include "txt_file.h"
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -10,7 +10,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-char* pvg_directory_parent(const char *path){
+char* txt_directory_parent(const char *path){
   if (null != path){
     size_t len = strlen(path);
     off_t trm = (len-1);
@@ -31,7 +31,7 @@ char* pvg_directory_parent(const char *path){
   return null;
 }
 
-bool_t pvg_directory(const char *dir){
+bool_t txt_directory(const char *dir){
   struct stat sb;
   if (0 == stat(dir,&sb) && S_IFDIR == (sb.st_mode & S_IFMT) ){
     /*
@@ -49,9 +49,9 @@ bool_t pvg_directory(const char *dir){
     /*
      * Recursive creation from parent to child.
      */
-    char *parent = pvg_directory_parent(dir);
+    char *parent = txt_directory_parent(dir);
     if (null != parent){
-      bool_t created = pvg_directory(parent);
+      bool_t created = txt_directory(parent);
       
       free(parent);
       parent = null;
@@ -69,7 +69,7 @@ bool_t pvg_directory(const char *dir){
   }
 }
 
-size_t pvg_file_size(const char *file){
+size_t txt_file_size(const char *file){
   if (null != file){
     struct stat sb;
     if (0 == stat(file,&sb)){
@@ -80,10 +80,10 @@ size_t pvg_file_size(const char *file){
   return 0;
 }
 
-pvg_file* pvg_file_new(size_t size){
+txt_file* txt_file_new(size_t size){
   if (0 < size){
-    size_t count = (sizeof(pvg_file)+size);
-    pvg_file *re = calloc(1,count);
+    size_t count = (sizeof(txt_file)+size);
+    txt_file *re = calloc(1,count);
     if (null != re){
       re->alloc = size;
 
@@ -93,14 +93,14 @@ pvg_file* pvg_file_new(size_t size){
   return null;
 }
 
-pvg_file* pvg_file_read(const char *file){
+txt_file* txt_file_read(const char *file){
   if (null != file){
-    size_t file_size = pvg_file_size(file);
+    size_t file_size = txt_file_size(file);
     if (0 < file_size){
-      pvg_file *object = pvg_file_new(file_size);
+      txt_file *object = txt_file_new(file_size);
       fd_t fd = open(file,O_RDONLY);
       if (-1 < fd){
-	char *p = pvg_file_buffer(object);
+	char *p = txt_file_buffer(object);
 	ssize_t z = object->alloc;
 	ssize_t rd;
 	size_t w = 0;
@@ -115,25 +115,25 @@ pvg_file* pvg_file_read(const char *file){
 	return object;
       }
       else {
-	pvg_file_destroy(object);
+	txt_file_destroy(object);
       }
     }
   }
   return null;
 }
 
-void pvg_file_destroy(pvg_file *object){
+void txt_file_destroy(txt_file *object){
   if (null != object){
     memset(object,0,object->alloc);
     free(object);
   }
 }
 
-bool_t pvg_file_write(pvg_file *object, const char *file){
+bool_t txt_file_write(txt_file *object, const char *file){
   if (null != object && null != file && 0 < object->limit && object->limit <= object->alloc){
     fd_t fd = open(file,(O_WRONLY|O_CREAT|O_TRUNC),0644);
     if (-1 < fd){
-      char *p = pvg_file_buffer(object);
+      char *p = txt_file_buffer(object);
       ssize_t z = object->limit;
       ssize_t wr;
       while (0 < z && 0 < (wr = write(fd,p,z))){
@@ -147,9 +147,9 @@ bool_t pvg_file_write(pvg_file *object, const char *file){
   return false;
 }
 
-bool_t pvg_file_readline(pvg_string *tgt, pvg_file *src){
+bool_t txt_file_readline(txt_string *tgt, txt_file *src){
   if (null != tgt && null != src){
-    memset(tgt,0,sizeof(pvg_string));
+    memset(tgt,0,sizeof(txt_string));
     char *begin = src->buffer+src->ofset;
     char *end = src->buffer+src->limit;
     ssize_t len = (end-begin);
@@ -165,7 +165,7 @@ bool_t pvg_file_readline(pvg_string *tgt, pvg_file *src){
       char *lend = strchr(begin,'\n');
       if (lend > begin){
 	size_t count = (lend-begin);
-	if (count < pvg_string_buffer_size){
+	if (count < txt_string_buffer_size){
 	  memcpy(tgt,begin,count);
 	  src->ofset += (count+1);
 	  tgt->length = (count+1);
