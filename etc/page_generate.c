@@ -32,14 +32,14 @@ static const size_t target_tail_count = 2;
 size_t copy_page(char *buffer, size_t size, const char* source[], size_t source_len){
   if (null != buffer){
     char *bp = buffer;
+    ssize_t bz = size;
     off_t idx, cnt;
-    ssize_t sz = size;
     size_t output = 0;
     for (idx = 0, cnt = source_len; idx < cnt; idx++){
-      int many = snprintf(bp,sz,"%s\n",source[idx]);
-      if (0 < many && 0 < sz){
+      int many = snprintf(bp,bz,"%s\n",source[idx]);
+      if (0 < many && 0 < bz){
 	bp += many;
-	sz -= many;
+	bz -= many;
 	output += many;
 	continue;
       }
@@ -69,8 +69,20 @@ bool_t readline(pvg_string *io, const char* source, size_t source_len){
       const char *begin = source;
       char *end = strchr(source,'\n');
       if (end > begin){
+	off_t index;
 	size_t count = (end-begin);
-	memcpy(io,source,count);
+	/* 
+	 * memcpy(io,source,count)
+	 */
+	char *tgt = (char*)io;
+	char *src = (char*)source;
+	for (index = 0; index < count; index++){
+
+	  if ('"' == *src){
+	    *tgt++ = '\\';
+	  }
+	  *tgt++ = *src++;
+	}
 	io->length = (count+1);
 	return true;
       }
@@ -92,7 +104,8 @@ size_t encode_page(char *buffer, size_t size, const char* source, size_t source_
   char *bp = buffer;
   ssize_t bz = size;
   size_t output = 0;
-  wr = snprintf(bp,bz,"static const char *page_head = {\n");
+  size_t count = 0;
+  wr = snprintf(bp,bz,"static const char *page_head[] = {\n");
   bp += wr;
   bz -= wr;
   output += wr;
@@ -105,27 +118,41 @@ size_t encode_page(char *buffer, size_t size, const char* source, size_t source_
       sp += line.length;
       sz -= line.length;
 
-      wr = snprintf(bp,sz,"};\n");
+      wr = snprintf(bp,bz,"};\n");
       bp += wr;
       bz -= wr;
       output += wr;
 
-      wr = snprintf(bp,bz,"static const char *page_tail = {\n");
+      wr = snprintf(bp,bz,"static const uint32_t page_head_count = %ld;\n",count);
       bp += wr;
       bz -= wr;
       output += wr;
+
+      wr = snprintf(bp,bz,"static const char *page_tail[] = {\n");
+      bp += wr;
+      bz -= wr;
+      output += wr;
+
+      count = 0;
     }
     else {
-      wr = snprintf(bp,sz,"  \"%s\",\n",(char*)linep);
+      wr = snprintf(bp,bz,"  \"%s\",\n",(char*)linep);
       bp += wr;
       bz -= wr;
       output += wr;
 
       sp += line.length;
       sz -= line.length;
+
+      count += 1;
     }
   }
-  wr = snprintf(bp,sz,"};\n");
+  wr = snprintf(bp,bz,"};\n");
+  bp += wr;
+  bz -= wr;
+  output += wr;
+
+  wr = snprintf(bp,bz,"static const uint32_t page_tail_count = %ld;\n",count);
   bp += wr;
   bz -= wr;
   output += wr;

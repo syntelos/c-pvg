@@ -15,7 +15,7 @@ int usage(){
 int main(int argc, char **argv){
   if (2 < argc){
     pvg_file *tgt = pvg_file_new(0x100000);
-    pvg_file *src = pvg_file_read(argv[2]);
+    pvg_text *src = pvg_text_read(argv[2]);
 
     char *style = "rm";
     if (3 < argc && 0 == strcmp("tt",argv[3])){

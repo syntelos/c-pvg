@@ -7,7 +7,8 @@
 
 #include "syntelos.h"
 #include "pvg_file.h"
+#include "pvg_text.h"
 
-bool_t pvg_encode(pvg_file*,pvg_file*,char*);
+bool_t pvg_encode(pvg_file*,pvg_text*,char*);
 
 #endif
