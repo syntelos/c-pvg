@@ -38,12 +38,14 @@ bool_t pvg_encode(txt_file *tgt, txt_text *src, char *style){
 
   size_t count = txt_text_length(src);
   for (idx = 0; idx < count; idx++, src++){
+
     if (0 != src->text.length){
       char *src_text = (char*)&(src->text);
       size_t src_text_ws = txt_cc_ws_sz(src_text);
-      x = pvg_page_x0+(src_text_ws*pvg_page_em);
-      src_text += src_text_ws;
 
+      x = pvg_page_x0+(src_text_ws*pvg_page_em);
+
+      src_text += src_text_ws;
       if (0 != *src_text){
 
 	if (0 != src->link.length){

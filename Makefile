@@ -30,6 +30,9 @@ inc/page.h: etc/page_generate.c etc/page.svg $(HEADERS) $(SOURCES)
 	$(CC) $(CCFLAGS) -o $@ $< $(SOURCES) $(LDFLAGS)
 	./page_generate
 
+page_generate: etc/page_generate.c etc/page.svg $(HEADERS) $(SOURCES)
+	$(CC) $(CCFLAGS) -o $@ $< $(SOURCES) $(LDFLAGS)
+
 clean:
 	$(RM) pvg page_generate *.svg
 

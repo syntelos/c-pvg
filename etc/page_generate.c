@@ -3,6 +3,8 @@
  * Copyright 2024 John Douglas Pritchard, Syntelos
  */
 #include "pvg.h"
+#include "txt_file.h"
+#include "txt_string.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -16,7 +18,7 @@ static const char *target_head[] = {
   "#define _pvg_page_h",
   "",
   "#define pvg_page_lh 18",
-  "#define pvg_page_em 12",
+  "#define pvg_page_em 6",
   "#define pvg_page_x0 30",
   "#define pvg_page_y0 50",
   "",
@@ -56,9 +58,9 @@ size_t copy_page(char *buffer, size_t size, const char* source[], size_t source_
 /*
  * Counting but not copying line terminals.
  */
-bool_t readline(pvg_string *io, const char* source, size_t source_len){
+bool_t readline(txt_string *io, const char* source, size_t source_len){
   if (null != io && null != source && 0 < source_len){
-    memset(io,0,sizeof(pvg_string));
+    memset(io,0,sizeof(txt_string));
     if ('\n' == *source){
       if (1 < source_len){
 	io->length = 1;
@@ -94,7 +96,7 @@ bool_t readline(pvg_string *io, const char* source, size_t source_len){
 #define isbreak_string "  <text "
 #define isbreak_string_length 8
 
-bool_t isbreak(pvg_string *io){
+bool_t isbreak(txt_string *io){
   return (0 == strncmp((const char*)io,isbreak_string,isbreak_string_length));
 }
 
@@ -109,8 +111,8 @@ size_t encode_page(char *buffer, size_t size, const char* source, size_t source_
   bp += wr;
   bz -= wr;
   output += wr;
-  pvg_string line;
-  pvg_string *linep = (&line);
+  txt_string line;
+  txt_string *linep = (&line);
   const char *sp = source;
   size_t sz = source_len;
   while (readline(&line,sp,sz)){
@@ -163,9 +165,9 @@ size_t encode_page(char *buffer, size_t size, const char* source, size_t source_
 int main(int argc, char **argv){
   char *source = "etc/page.svg";
   char *target = "inc/pvg_page.h";
-  pvg_file *out = pvg_file_new(0x100000);
+  txt_file *out = txt_file_new(0x100000);
   if (null != out){
-    char *bp = pvg_file_buffer(out);
+    char *bp = txt_file_buffer(out);
     size_t bz = out->alloc;
     size_t oz, bo = 0;
     /*
@@ -178,9 +180,9 @@ int main(int argc, char **argv){
     /*
      * Read target body
      */
-    pvg_file *in = pvg_file_read(source);
+    txt_file *in = txt_file_read(source);
     if (null != in){
-      char *source_svg = pvg_file_buffer(in);
+      char *source_svg = txt_file_buffer(in);
       size_t source_svg_len = in->limit;
       /*
        * Encode target body
@@ -201,7 +203,7 @@ int main(int argc, char **argv){
        */
       out->limit = bo;
  
-      if (pvg_file_write(out,target)){
+      if (txt_file_write(out,target)){
 
 	return 0;
       }

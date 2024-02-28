@@ -6,7 +6,7 @@
 #define _pvg_page_h
 
 #define pvg_page_lh 18
-#define pvg_page_em 12
+#define pvg_page_em 6
 #define pvg_page_x0 30
 #define pvg_page_y0 50
 
