@@ -14,6 +14,5 @@ typedef size_t (*txt_cc_sz)(const char*);
 typedef bool_t (*txt_cc_is)(const char*);
 
 #include "txt_cc_id.h"
-#include "txt_cc_in.h"
 #include "txt_cc_ws.h"
 #endif
