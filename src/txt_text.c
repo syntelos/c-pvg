@@ -1,5 +1,5 @@
 /*
- * page svg from text
+ * syntelos common text operators
  * Copyright 2024 John Douglas Pritchard, Syntelos
  */
 #include "txt_file.h"
