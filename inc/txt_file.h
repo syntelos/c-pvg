@@ -32,10 +32,14 @@ bool_t txt_directory(const char*);
  * Existing file content length, or zero.
  */
 size_t txt_file_size(const char*);
+
+#define txt_file_exists(fn) 0 != txt_file_size(fn)
 /*
  * Existing file content length, or zero.
  */
 txt_file* txt_file_new(size_t);
+
+txt_file* txt_file_create(const char*);
 
 void txt_file_destroy(txt_file*);
 

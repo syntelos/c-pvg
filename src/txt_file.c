@@ -93,6 +93,22 @@ txt_file* txt_file_new(size_t size){
   return null;
 }
 
+txt_file* txt_file_create(const char *source){
+  if (null != source){
+    size_t size = strlen(source);
+    txt_file *file = txt_file_new(size+1);
+    {
+      char *file_content = file->buffer;
+      memcpy(file_content,source,size);
+      file->limit = size;
+    }
+    return file;
+  }
+  else {
+    return null;
+  }
+}
+
 txt_file* txt_file_read(const char *file){
   if (null != file){
     size_t file_size = txt_file_size(file);
