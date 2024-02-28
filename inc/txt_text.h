@@ -45,4 +45,6 @@ size_t txt_text_count(txt_text*);
  */
 txt_text* txt_text_append(txt_text*,txt_string*);
 
+void txt_text_destroy(txt_text*);
+
 #endif

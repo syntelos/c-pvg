@@ -107,3 +107,12 @@ txt_text* txt_text_append(txt_text *oarray, txt_string *line){
   }
   return oarray;
 }
+
+void txt_text_destroy(txt_text *array){
+  if (null != array){
+    size_t count = txt_text_count(array);
+    size_t extent = count*sizeof(txt_text);
+    memset(array,0,extent);
+    free(array);
+  }
+}
