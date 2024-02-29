@@ -15,4 +15,5 @@ typedef bool_t (*txt_cc_is)(const char*);
 
 #include "txt_cc_id.h"
 #include "txt_cc_ws.h"
+#include "txt_cc_group.h"
 #endif
