@@ -5,6 +5,7 @@
 #include "pvg.h"
 #include "pvg_page.h"
 #include "txt_cc_ws.h"
+#include "txt_cc_xr.h"
 #include <stdio.h>
 
 bool_t pvg_encode(txt_file *tgt, txt_text *src, char *style){
@@ -49,7 +50,18 @@ bool_t pvg_encode(txt_file *tgt, txt_text *src, char *style){
       if (0 != *src_text){
 
 	if (0 != src->link.length){
-	  if (1 == line){
+
+	  if (src->link.length == txt_cc_xr_sz(src->link.buffer)+1){
+	    if (1 == line){
+	      class.length = sprintf(class_p,"tt ti ln");
+	      line += 1;
+	    }
+	    else {
+	      class.length = sprintf(class_p,"tt ln");
+	      line += 1;
+	    }
+	  }
+	  else if (1 == line){
 	    class.length = sprintf(class_p,"%s ti ln",style);
 	    line += 1;
 	  }
@@ -57,7 +69,7 @@ bool_t pvg_encode(txt_file *tgt, txt_text *src, char *style){
 	    class.length = sprintf(class_p,"%s ln",style);
 	    line += 1;
 	  }
-	  wr = snprintf(tgt_p, tgt_z, "  <a href=\"%s\"><text x=\"%ld\" y=\"%ld\" class=\"%s\">%s</text></a>\n", (char*)&(src->link), x, y, class_p, src_text);
+	  wr = snprintf(tgt_p, tgt_z, "  <a href=\"%s\" target=\"_top\"><text x=\"%ld\" y=\"%ld\" class=\"%s\">%s</text></a>\n", (char*)&(src->link), x, y, class_p, src_text);
 	  if (0 < wr){
 	    tgt_p += wr;
 	    tgt_z -= wr;
