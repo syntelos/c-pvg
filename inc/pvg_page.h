@@ -24,7 +24,7 @@ static const char *page_head[] = {
   "      }",
   "      text.tt {",
   "	  font-family: \"Computer Modern Typewriter\", monospace;",
-  "	  font-size: 12;",
+  "	  font-size: 10;",
   "	  fill: black;",
   "      }",
   "      text.ti {",
